@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Group 15- LLM Style Guide Editor </title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+
+  <style>
+    body {
+      background-image: url('https://www.unite.ai/wp-content/uploads/2023/06/llm.jpg');
+      background-size: cover; /* Adjust as needed */
+      background-repeat: no-repeat;
+      background-attachment: fixed; /* Fixed background */
+      color: white; /* Set font color to white */
+      text-align: center; /* Center align text */
+    }
+
+    /* Style to make the text box resizable */
+    textarea {
+      resize: both;
+      overflow: auto;
+      margin-top: 5px; /* Add margin between textareas */
+    }
+
+    /* Style for the container of the title and button */
+    .title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center align container */
+      margin-bottom: 10px; /* Added margin to separate containers */
+    }
+
+    /* Margin to separate the button from the title */
+    button {
+      margin-left: 10px;
+    }
+
+    /* Style for the unordered list */
+    ul {
+      list-style-type: none; /* Remove bullet points */
+      padding: 0; /* Remove default padding */
+    }
+
+    /* Style for list items in the unordered list */
+    li {
+      text-align: center; /* Align list items to the left */
+    }
+  </style>
+</head>
+
+<body>
+  <h1> Group 15- LLM Style Guide Editor </h1>
+  <h3> Group Members: </h3>
+  <ul>
+    <li> Brandon Bratcher</li>
+    <li> Jonathon Surles </li>
+    <li> Samruddhi Bhosale </li>
+    <li> Orlando Robles</li>
+    <li> James Gibson </li>
+  </ul>
+
+  <!-- Container for the Meeting Minutes title and button -->
+  <div class="title-container">
+    <h3> Meeting Minutes: </h3>
+    <!-- Button to trigger adding the resizable text box -->
+    <button onclick="addResizableTextBox('Meeting Minutes')">+</button>
+  </div>
+
+  <!-- Container for the Upcoming Schedules title and button -->
+  <div class="title-container">
+    <h3> Upcoming Schedules: </h3>
+    <!-- Button to trigger adding the resizable text box -->
+    <button onclick="addResizableTextBox('Upcoming Schedules')">+</button>
+  </div>
+
+  <!-- Container for the Project Files title and button -->
+  <div class="title-container">
+    <h3> Project Files: </h3>
+    <!-- Button to trigger adding the resizable text box -->
+    <button onclick="addResizableTextBox('Project Files')">+</button>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
+
+  <script>
+    function addResizableTextBox(section) {
+      // Create a new container for the textarea
+      var container = document.createElement("div");
+
+      // Create a new text input element
+      var textBox = document.createElement("textarea");
+      textBox.setAttribute("rows", "4"); // Set initial number of rows
+      textBox.setAttribute("cols", "50"); // Set initial number of columns
+
+      // Append the new text input element to the container
+      container.appendChild(textBox);
+
+      // Find the container for the specified section
+      var titleContainers = document.querySelectorAll('.title-container');
+      for (var i = 0; i < titleContainers.length; i++) {
+        if (titleContainers[i].textContent.includes(section)) {
+          // Append the new container after the title container
+          titleContainers[i].parentNode.insertBefore(container, titleContainers[i].nextSibling);
+          break;
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
+
