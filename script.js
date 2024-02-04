@@ -8,7 +8,6 @@ const firebaseConfig = {
   measurementId: "G-24V83F2TF2"
 };
 
-
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
@@ -42,12 +41,16 @@ function addResizableTextBox(section) {
   for (let i = 0; i < titleContainers.length; i++) {
     if (titleContainers[i].textContent.includes(section)) {
       titleContainers[i].parentNode.insertBefore(container, titleContainers[i].nextSibling);
+
+      // Add event listener for input
+      textBox.addEventListener('input', function() {
+        textBoxes.push({ section: section, value: textBox.value });
+        saveData();
+      });
+
       break;
     }
   }
-
-  textBoxes.push({ section: section, value: textBox.value });
-  saveData();
 }
 
 function renderTextBoxes() {
@@ -56,13 +59,18 @@ function renderTextBoxes() {
     const textBox = document.createElement("textarea");
     textBox.value = textBoxData.value;
     container.appendChild(textBox);
-    document.getElementById(textBoxData.section.toLowerCase().replace(/ /g, '-')).parentNode.insertBefore(container, document.getElementById(textBoxData.section.toLowerCase().replace(/ /g, '-')).nextSibling);
+
+    const sectionId = textBoxData.section.toLowerCase().replace(/ /g, '-');
+    const sectionContainer = document.getElementById(sectionId);
+    if (sectionContainer) {
+      sectionContainer.parentNode.insertBefore(container, sectionContainer.nextSibling);
+    }
   });
 }
-
-window.addEventListener('load', loadData);
 
 const textAreas = document.querySelectorAll('textarea');
 textAreas.forEach(textArea => {
   textArea.addEventListener('input', saveData);
 });
+
+window.addEventListener('load', loadData);
