@@ -14,21 +14,28 @@ const database = firebase.database();
 let textBoxes = [];
 
 function saveData() {
-  const dataRef = database.ref('textboxes');
-  dataRef.set(textBoxes);
+  const dataRef = database.collection('textboxes').doc('data');
+  dataRef.set({ textBoxes: textBoxes })
+    .then(() => console.log('Data saved successfully'))
+    .catch(error => console.error('Error saving data:', error));
 }
 
 function loadData() {
-  const dataRef = database.ref('textboxes');
-  dataRef.once('value')
+  const dataRef = database.collection('textboxes').doc('data');
+  dataRef.get()
     .then(snapshot => {
-      const storedData = snapshot.val();
+      const storedData = snapshot.data();
+      console.log('Stored Data:', storedData);
       if (storedData) {
-        textBoxes = storedData;
+        textBoxes = storedData.textBoxes;
         renderTextBoxes();
       }
+    })
+    .catch(error => {
+      console.error('Error loading data:', error);
     });
 }
+
 
 function addResizableTextBox(section) {
   const container = document.createElement("div");
