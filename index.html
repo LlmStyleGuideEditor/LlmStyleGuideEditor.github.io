@@ -38,22 +38,29 @@
     <button onclick="addResizableTextBox('Project Files')">+</button>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBvvuTg6O_L4qtyRcyueFo8x-M9SfDG6sY",
-      authDomain: "capsoteweb.firebaseapp.com",
-      projectId: "capsoteweb",
-      storageBucket: "capsoteweb.appspot.com",
-      messagingSenderId: "514921944177",
-      appId: "1:514921944177:web:2516e643f946e994ccf7d0",
-      measurementId: "G-24V83F2TF2"
-    };
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBvvuTg6O_L4qtyRcyueFo8x-M9SfDG6sY",
+    authDomain: "capsoteweb.firebaseapp.com",
+    projectId: "capsoteweb",
+    storageBucket: "capsoteweb.appspot.com",
+    messagingSenderId: "514921944177",
+    appId: "1:514921944177:web:2516e643f946e994ccf7d0",
+    measurementId: "G-24V83F2TF2"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // Get Firestore instance
+  const firestore = getFirestore(app);
 
     let textBoxes = [];
 
