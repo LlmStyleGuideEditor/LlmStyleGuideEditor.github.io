@@ -14,8 +14,7 @@ const database = firebase.database();
 let textBoxes = [];
 
 function saveData() {
-  console.log('Saving data to Firestore');
-  const dataRef = database.collection('textboxes').doc('data');
+  const dataRef = firestore.collection('textboxes').doc('data');
   dataRef.set({ textBoxes: textBoxes })
     .then(() => console.log('Data saved successfully'))
     .catch(error => console.error('Error saving data:', error));
@@ -54,7 +53,10 @@ function addResizableTextBox(section) {
 
       // Add event listener for input
       textBox.addEventListener('input', function() {
-        textBoxes.push({ section: section, value: textBox.value });
+        const initialValue = textBox.value;
+
+    // Push the data to the textBoxes array
+      textBoxes.push({ section: section, value: initialValue });
         saveData();
       });
 
