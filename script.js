@@ -14,6 +14,7 @@ const database = firebase.database();
 let textBoxes = [];
 
 function saveData() {
+  console.log('Saving data to Firestore');
   const dataRef = database.collection('textboxes').doc('data');
   dataRef.set({ textBoxes: textBoxes })
     .then(() => console.log('Data saved successfully'))
@@ -21,6 +22,7 @@ function saveData() {
 }
 
 function loadData() {
+  console.log('Loading data from Firestore');
   const dataRef = database.collection('textboxes').doc('data');
   dataRef.get()
     .then(snapshot => {
@@ -35,6 +37,7 @@ function loadData() {
       console.error('Error loading data:', error);
     });
 }
+
 
 
 function addResizableTextBox(section) {
