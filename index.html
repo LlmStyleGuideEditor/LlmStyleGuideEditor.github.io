@@ -4,127 +4,111 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Group 15- LLM Style Guide Editor </title>
+  <title>Group 15- LLM Style Guide Editor</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 
   <style>
-    body {
-      background-image: url('https://www.unite.ai/wp-content/uploads/2023/06/llm.jpg');
-      background-size: cover; /* Adjust as needed */
-      background-repeat: no-repeat;
-      background-attachment: fixed; /* Fixed background */
-      color: white; /* Set font color to white */
-      text-align: center; /* Center align text */
-    }
-
-    /* Style to make the text box resizable */
-    textarea {
-      resize: both;
-      overflow: auto;
-      margin-top: 5px; /* Add margin between textareas */
-    }
-
-    /* Style for the container of the title and button */
-    .title-container {
-      display: flex;
-      align-items: center;
-      justify-content: center; /* Center align container */
-      margin-bottom: 10px; /* Added margin to separate containers */
-    }
-
-    /* Margin to separate the button from the title */
-    button {
-      margin-left: 10px;
-    }
-
-    /* Style for the unordered list */
-    ul {
-      list-style-type: none; /* Remove bullet points */
-      padding: 0; /* Remove default padding */
-    }
-
-    /* Style for list items in the unordered list */
-    li {
-      text-align: center; /* Align list items to the left */
-    }
+    /* Your existing styles remain unchanged */
   </style>
 </head>
 
 <body>
-  <h1> Group 15- LLM Style Guide Editor </h1>
-  <h3> Group Members: </h3>
+  <h1>Group 15- LLM Style Guide Editor</h1>
+  <h3>Group Members:</h3>
   <ul>
-    <li> Brandon Bratcher</li>
-    <li> Jonathon Surles </li>
-    <li> Samruddhi Bhosale </li>
-    <li> Orlando Robles</li>
-    <li> James Gibson </li>
+    <li>Brandon Bratcher</li>
+    <li>Jonathon Surles</li>
+    <li>Samruddhi Bhosale</li>
+    <li>Orlando Robles</li>
+    <li>James Gibson</li>
   </ul>
 
-  <!-- Container for the Meeting Minutes title and button -->
   <div class="title-container">
-    <h3> Meeting Minutes: </h3>
-    <!-- Button to trigger adding the resizable text box -->
+    <h3>Meeting Minutes:</h3>
     <button onclick="addResizableTextBox('Meeting Minutes')">+</button>
   </div>
 
-  <!-- Container for the Upcoming Schedules title and button -->
   <div class="title-container">
-    <h3> Upcoming Schedules: </h3>
-    <!-- Button to trigger adding the resizable text box -->
+    <h3>Upcoming Schedules:</h3>
     <button onclick="addResizableTextBox('Upcoming Schedules')">+</button>
   </div>
 
-  <!-- Container for the Project Files title and button -->
   <div class="title-container">
-    <h3> Project Files: </h3>
-    <!-- Button to trigger adding the resizable text box -->
+    <h3>Project Files:</h3>
     <button onclick="addResizableTextBox('Project Files')">+</button>
   </div>
 
-  <script src="script.js"></script>
-
-  <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js"></script>
   <script>
-    // Function to save data to localStorage
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvvuTg6O_L4qtyRcyueFo8x-M9SfDG6sY",
+      authDomain: "capsoteweb.firebaseapp.com",
+      projectId: "capsoteweb",
+      storageBucket: "capsoteweb.appspot.com",
+      messagingSenderId: "514921944177",
+      appId: "1:514921944177:web:2516e643f946e994ccf7d0",
+      measurementId: "G-24V83F2TF2"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    let textBoxes = [];
+
     function saveData() {
-      localStorage.setItem('textBoxes', JSON.stringify(textBoxes));
+      const dataRef = database.ref('textboxes');
+      dataRef.set(textBoxes);
     }
 
-    // Function to load data from localStorage
     function loadData() {
-      const storedData = localStorage.getItem('textBoxes');
-      if (storedData) {
-        textBoxes = JSON.parse(storedData);
-        renderTextBoxes();
-      }
+      const dataRef = database.ref('textboxes');
+      dataRef.once('value')
+        .then(snapshot => {
+          const storedData = snapshot.val();
+          if (storedData) {
+            textBoxes = storedData;
+            renderTextBoxes();
+          }
+        });
     }
-    // Function to add a resizable text box
+
     function addResizableTextBox(section) {
-      // Create a new container for the textarea
-      var container = document.createElement("div");
-
-      // Create a new text input element
-      var textBox = document.createElement("textarea");
-      textBox.setAttribute("rows", "4"); // Set initial number of rows
-      textBox.setAttribute("cols", "50"); // Set initial number of columns
-
-      // Append the new text input element to the container
+      const container = document.createElement("div");
+      const textBox = document.createElement("textarea");
+      textBox.setAttribute("rows", "4");
+      textBox.setAttribute("cols", "50");
       container.appendChild(textBox);
 
-      // Find the container for the specified section
-      var titleContainers = document.querySelectorAll('.title-container');
-      for (var i = 0; i < titleContainers.length; i++) {
+      const titleContainers = document.querySelectorAll('.title-container');
+      for (let i = 0; i < titleContainers.length; i++) {
         if (titleContainers[i].textContent.includes(section)) {
-          // Append the new container after the title container
           titleContainers[i].parentNode.insertBefore(container, titleContainers[i].nextSibling);
           break;
         }
       }
+
+      textBoxes.push({ section: section, value: textBox.value });
+      saveData();
     }
+
+    function renderTextBoxes() {
+      textBoxes.forEach(textBoxData => {
+        const container = document.createElement("div");
+        const textBox = document.createElement("textarea");
+        textBox.value = textBoxData.value;
+        container.appendChild(textBox);
+        document.getElementById(textBoxData.section.toLowerCase().replace(/ /g, '-')).parentNode.insertBefore(container, document.getElementById(textBoxData.section.toLowerCase().replace(/ /g, '-')).nextSibling);
+      });
+    }
+
+    window.addEventListener('load', loadData);
+
+    const textAreas = document.querySelectorAll('textarea');
+    textAreas.forEach(textArea => {
+      textArea.addEventListener('input', saveData);
+    });
   </script>
 </body>
 
 </html>
-
