@@ -40,28 +40,31 @@ function loadData() {
 
 
 function addResizableTextBox(section) {
-  console.log('Adding resizable text box for section:', section);
   const container = document.createElement("div");
   const textBox = document.createElement("textarea");
   textBox.setAttribute("rows", "4");
   textBox.setAttribute("cols", "50");
   container.appendChild(textBox);
 
-  const titleContainers = document.querySelectorAll('.title-container');
-  for (let i = 0; i < titleContainers.length; i++) {
-    if (titleContainers[i].textContent.includes(section)) {
-      titleContainers[i].parentNode.insertBefore(container, titleContainers[i].nextSibling);
+  const titleContainer = document.querySelector(`.title-container:contains("${section}")`);
+  
+  if (titleContainer) {
+    titleContainer.parentNode.insertBefore(container, titleContainer.nextSibling);
 
-      // Add event listener for input
-      textBox.addEventListener('input', function() {
-        const initialValue = textBox.value;
+    // Add button to trigger adding a new resizable text box for the same section
+    const addButton = document.createElement("button");
+    addButton.innerText = "+";
+    addButton.onclick = () => addResizableTextBox(section);
+    titleContainer.appendChild(addButton);
 
-    // Push the data to the textBoxes array
-      textBoxes.push({ section: section, value: initialValue }); 
-      console.log('TextBoxes after adding:', textBoxes);
-      console.log('Calling saveData...');
-        saveData();
-      });
+    // Add data to the textBoxes array
+    textBoxes.push({ section: section, value: textBox.value });
+
+    // Save data to Firestore
+    saveData();
+  }
+}
+
 
       break;
     }
