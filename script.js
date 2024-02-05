@@ -40,6 +40,7 @@ function loadData() {
 
 
 function addResizableTextBox(section) {
+  console.log('Adding resizable text box for section:', section);
   const container = document.createElement("div");
   const textBox = document.createElement("textarea");
   textBox.setAttribute("rows", "4");
@@ -56,7 +57,9 @@ function addResizableTextBox(section) {
         const initialValue = textBox.value;
 
     // Push the data to the textBoxes array
-      textBoxes.push({ section: section, value: initialValue });
+      textBoxes.push({ section: section, value: initialValue }); 
+      console.log('TextBoxes after adding:', textBoxes);
+      console.log('Calling saveData...');
         saveData();
       });
 
