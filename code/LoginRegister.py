@@ -1,7 +1,7 @@
 import re
 from tkinter import *
-from User import User
 from Home import home
+from database import *
 
 def LoginRegister(loginWindow, fontstyle):
 
@@ -35,16 +35,17 @@ def LoginRegister(loginWindow, fontstyle):
         password = entPass.get()
 
         forgetErrors()
-    
-        if id == 'uid' and password == 'upass':
-            currentUser = User(id, password)
-            forgetWidgets()
-            home(loginWindow, fontstyle)
-        elif id == '' and password == '':
-            errEmpty.pack(pady=5)
-        else:
+
+        currentUser = login_user(id, password)
+
+        if currentUser is None:
             errLogin.pack(pady=5)
-    
+            return
+
+        forgetWidgets()
+        home(loginWindow, fontstyle)
+
+
     def cmdRegister():
         
         id = entUser.get()
@@ -52,17 +53,15 @@ def LoginRegister(loginWindow, fontstyle):
 
         forgetErrors()
 
-        if id == 'uid' and password == 'upass':
+        currentUser = register_user(id, password)
+
+        if currentUser is None:
             errRegister.pack(pady=5)
-        elif id == '' or password == '':
-            errEmpty.pack(pady=5)
-        elif re.search('\s+', id) or re.search('\s+', password):
-            errSpace.pack(pady=5)
-        else:
-            currentUser = User(id, password)
-            forgetWidgets()
-            home(loginWindow, fontstyle)
-    
+            return
+
+        forgetWidgets()
+        home(loginWindow, fontstyle)
+
 
     #Add widgets
     frame1 = Frame(loginWindow)

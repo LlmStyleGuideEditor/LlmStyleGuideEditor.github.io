@@ -42,6 +42,7 @@ def register_user(username, password):
     # Add everything to user database
     cursor.execute('insert into users (username, pw_salt, pw_hash, encrypted_key, key_nonce) values (?, ?, ?, ?, ?)',
                    (username, salt_b64, password_hash_b64, encrypted_key_b64, nonce))
+    connection.commit()
     cursor.execute('select id from users where username = ?', (username,))
     user_id = cursor.fetchone()[0]
 
@@ -88,5 +89,4 @@ def login_user(username, password):
 
 
 if __name__ == '__main__':
-    print(repr(register_user('Emoji', ' ')))
-    print(repr(login_user('Emoji', ' ')))
+    pass
