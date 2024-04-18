@@ -1,6 +1,6 @@
 import re
 from tkinter import *
-from User import user
+from User import User
 from Home import home
 
 def LoginRegister(loginWindow, fontstyle):
@@ -37,7 +37,7 @@ def LoginRegister(loginWindow, fontstyle):
         forgetErrors()
     
         if id == 'uid' and password == 'upass':
-            currentUser = user(id, password)
+            currentUser = User(id, password)
             forgetWidgets()
             home(loginWindow, fontstyle)
         elif id == '' and password == '':
@@ -59,7 +59,7 @@ def LoginRegister(loginWindow, fontstyle):
         elif re.search('\s+', id) or re.search('\s+', password):
             errSpace.pack(pady=5)
         else:
-            currentUser = user(id, password)
+            currentUser = User(id, password)
             forgetWidgets()
             home(loginWindow, fontstyle)
     
