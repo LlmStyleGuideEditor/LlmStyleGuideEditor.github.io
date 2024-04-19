@@ -152,9 +152,4 @@ def get_translations(user):
 
 
 if __name__ == '__main__':
-    cursor.execute("select * from sqlite_master")
-    print(cursor.fetchall())
-    print(repr(user := login_user("uid", "upass")))
-    print(repr(add_translation(user, "Hello World 5", "Hello World 5", commit=False)))
-    for translation in get_translations(user):
-        print(repr(translation))
+    pass

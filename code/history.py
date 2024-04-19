@@ -1,6 +1,6 @@
 from tkinter import *
-import UploadDownload
-import Home
+import upload_download
+import home
 import database
 import datetime
 
@@ -24,11 +24,11 @@ def history(history_window, fontstyle, current_user):
         for frame in frame_arr:
             frame.pack_forget()
         
-        Home.home(history_window, fontstyle, current_user)
+        home.home(history_window, fontstyle, current_user)
 
     def cmd_download(index):
 
-        UploadDownload.prompt_user("Download", translations[index].out_text)
+        upload_download.prompt_user("Download", translations[index].out_text)
 
     # Add widgets
     btn_back = Button(history_window, text="Back", font=(fontstyle, 10), command=cmd_back)
@@ -40,12 +40,12 @@ def history(history_window, fontstyle, current_user):
     download_buttons_arr = []
 
     translations = database.get_translations(current_user)
-    for index, translation in enumerate(translations):
+    for i, translation in enumerate(translations):
         frame_arr.append(Frame(history_window))
-        time_labels_arr.append(Label(frame_arr[index], text=str(datetime.datetime.fromtimestamp(translation.timestamp)),
+        time_labels_arr.append(Label(frame_arr[i], text=str(datetime.datetime.fromtimestamp(translation.timestamp)),
                                      font=(fontstyle, 10)))
-        download_buttons_arr.append(Button(frame_arr[index], text="Download", font=(fontstyle, 10),
-                                           command=lambda idx=index: cmd_download(idx)))
+        download_buttons_arr.append(Button(frame_arr[i], text="Download", font=(fontstyle, 10),
+                                           command=lambda idx=i: cmd_download(idx)))
     
     # Configure widget geometry
     btn_back.pack(anchor=W, padx=1, pady=1)
@@ -63,7 +63,7 @@ def history(history_window, fontstyle, current_user):
 if __name__ == "__main__":
 
     # Set the font
-    fontstyle = 'Courier New'
+    fontstyle_ = 'Courier New'
 
     # Create a root window and set dimensions
     root = Tk()
@@ -73,4 +73,4 @@ if __name__ == "__main__":
     if (user := database.login_user("uid", 'upass')) is None:
         user = database.register_user('uid', 'upass')
 
-    history(root, fontstyle, user)
+    history(root, fontstyle_, user)

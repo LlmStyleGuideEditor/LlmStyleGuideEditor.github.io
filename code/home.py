@@ -1,7 +1,6 @@
 from tkinter import *
-from datetime import datetime
-import UploadDownload
-import History
+import upload_download
+import history
 import database
 
 
@@ -28,13 +27,13 @@ def home(home_window, fontstyle, current_user):
         frame1.pack_forget()
         frame2.pack_forget()
 
-        History.history(home_window, fontstyle, current_user)
+        history.history(home_window, fontstyle, current_user)
     
     def cmd_convert():
 
         str_pre = retrieve_pre_text()
 
-        # TODO Kick strPre to LLM here
+        # TODO Kick str_pre to LLM here
 
         txt_post.configure(state=NORMAL)
         txt_post.delete("1.0", "end")
@@ -47,13 +46,13 @@ def home(home_window, fontstyle, current_user):
 
     def cmd_upload():
         
-        str_upload = UploadDownload.prompt_user("Upload")
+        str_upload = upload_download.prompt_user("Upload")
         txt_pre.delete("1.0", "end")
         txt_pre.insert("1.0", str_upload)
     
     def cmd_download():
 
-        UploadDownload.prompt_user("Download", retrieve_post_text())
+        upload_download.prompt_user("Download", retrieve_post_text())
 
     # Add widgets
     frame0 = Frame(home_window)
@@ -101,7 +100,7 @@ def home(home_window, fontstyle, current_user):
 if __name__ == "__main__":
 
     # Set the font
-    fontstyle = 'Courier New'
+    fontstyle_ = 'Courier New'
 
     # Create a root window and set dimensions
     root = Tk()
@@ -111,4 +110,4 @@ if __name__ == "__main__":
     if (user := database.login_user("uid", 'upass')) is None:
         user = database.register_user('uid', 'upass')
 
-    home(root, fontstyle, user)
+    home(root, fontstyle_, user)
