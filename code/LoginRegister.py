@@ -44,7 +44,7 @@ def LoginRegister(loginWindow, fontstyle):
             return
 
         forgetWidgets()
-        home(loginWindow, fontstyle)
+        home(loginWindow, fontstyle, currentUser)
 
     def cmdRegister():
         
@@ -60,7 +60,7 @@ def LoginRegister(loginWindow, fontstyle):
             return
 
         forgetWidgets()
-        home(loginWindow, fontstyle)
+        home(loginWindow, fontstyle, currentUser)
 
     # Add widgets
     frame1 = Frame(loginWindow)

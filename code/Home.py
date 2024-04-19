@@ -2,9 +2,10 @@ from tkinter import *
 from datetime import datetime
 import UploadDownload
 import History
+import database
 
 
-def home(homeWindow, fontstyle):
+def home(homeWindow, fontstyle, currentUser):
 
     # Set title
     homeWindow.title("Home")
@@ -27,7 +28,7 @@ def home(homeWindow, fontstyle):
         frame1.pack_forget()
         frame2.pack_forget()
 
-        History.history(homeWindow, fontstyle)
+        History.history(homeWindow, fontstyle, currentUser)
     
     def cmdConvert():
 
@@ -43,7 +44,7 @@ def home(homeWindow, fontstyle):
 
         strPost = retrievePostText()
 
-        History.addConversion(time, strPost)
+        database.add_translation(currentUser, strPre, strPost)
 
     def cmdUpload():
         
@@ -107,4 +108,8 @@ if __name__ == "__main__":
     root = Tk()
     root.geometry('1024x768')
 
-    home(root, fontstyle)
+    # Login to default user
+    if (user := database.login_user("uid", 'upass')) is None:
+        user = database.register_user('uid', 'upass')
+
+    home(root, fontstyle, user)

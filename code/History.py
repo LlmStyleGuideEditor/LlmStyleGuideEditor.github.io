@@ -1,16 +1,16 @@
 from tkinter import *
 import UploadDownload
 import Home
+import database
+import datetime
 
-convTimeHistory = []
-convTextHistory = []
+translations = []
 
 
-def history(historyWindow, fontstyle):
+def history(historyWindow, fontstyle, currentUser):
 
     # Access global variables
-    global convTimeHistory
-    global convTextHistory
+    global translations
 
     # Set title
     historyWindow.title("History")
@@ -21,14 +21,14 @@ def history(historyWindow, fontstyle):
         # Forget all widgets
         btnBack.pack_forget()
         lblAutoSTE.pack_forget()
-        for i in range(len(frameArr)):
-            frameArr[i].pack_forget()
+        for frame in frameArr:
+            frame.pack_forget()
         
-        Home.home(historyWindow, fontstyle)
+        Home.home(historyWindow, fontstyle, currentUser)
 
     def cmdDownload(index):
 
-        UploadDownload.promptUser("Download", convTextHistory[-1-index])
+        UploadDownload.promptUser("Download", translations[index].out_text)
 
     # Add widgets
     btnBack = Button(historyWindow, text="Back", font=(fontstyle, 10), command=cmdBack)
@@ -38,10 +38,14 @@ def history(historyWindow, fontstyle):
     frameArr = []
     timeLabelsArr = []
     downloadButtonsArr = []
-    for i in range(len(convTimeHistory)):
+
+    translations = database.get_translations(currentUser)
+    for index, translation in enumerate(translations):
         frameArr.append(Frame(historyWindow))
-        timeLabelsArr.append(Label(frameArr[i], text=convTimeHistory[-1-i], font=(fontstyle, 10)))
-        downloadButtonsArr.append(Button(frameArr[i], text="Download", font=(fontstyle, 10), command=lambda idx=i: cmdDownload(idx)))
+        timeLabelsArr.append(Label(frameArr[index], text=str(datetime.datetime.fromtimestamp(translation.timestamp)),
+                                   font=(fontstyle, 10)))
+        downloadButtonsArr.append(Button(frameArr[index], text="Download", font=(fontstyle, 10),
+                                         command=lambda idx=index: cmdDownload(idx)))
     
     # Configure widget geometry
     btnBack.pack(anchor=W, padx=1, pady=1)
@@ -55,19 +59,6 @@ def history(historyWindow, fontstyle):
     # Execute
     historyWindow.mainloop()
 
-
-def addConversion(convTime, convText):
-    global convTimeHistory
-    global convTextHistory
-
-    # Only store 10 recent conversions
-    if len(convTimeHistory) == 10:
-        convTimeHistory.pop(0)
-        convTextHistory.pop(0)
-
-    convTimeHistory.append(convTime)
-    convTextHistory.append(convText)
-
  
 if __name__ == "__main__":
 
@@ -78,5 +69,8 @@ if __name__ == "__main__":
     root = Tk()
     root.geometry('1024x768')
 
-    history(root, fontstyle)
-    
+    # Login to default user
+    if (user := database.login_user("uid", 'upass')) is None:
+        user = database.register_user('uid', 'upass')
+
+    history(root, fontstyle, user)
