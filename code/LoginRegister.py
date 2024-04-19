@@ -3,12 +3,13 @@ from tkinter import *
 from Home import home
 from database import *
 
+
 def LoginRegister(loginWindow, fontstyle):
 
-    #Set title
+    # Set title
     loginWindow.title("Login")
     
-    #Utility functions
+    # Utility functions
     def forgetWidgets():
 
         lblAutoSTE.pack_forget()
@@ -27,8 +28,8 @@ def LoginRegister(loginWindow, fontstyle):
         errEmpty.pack_forget()
         errSpace.pack_forget()
 
-    #Button command functions
-    #TO DO: Authenticate user with database, currently programmed for demo
+    # Button command functions
+    # TODO: Authenticate user with database, currently programmed for demo
     def cmdLogin():
 
         id = entUser.get()
@@ -44,7 +45,6 @@ def LoginRegister(loginWindow, fontstyle):
 
         forgetWidgets()
         home(loginWindow, fontstyle)
-
 
     def cmdRegister():
         
@@ -62,8 +62,7 @@ def LoginRegister(loginWindow, fontstyle):
         forgetWidgets()
         home(loginWindow, fontstyle)
 
-
-    #Add widgets
+    # Add widgets
     frame1 = Frame(loginWindow)
 
     lblAutoSTE = Label(loginWindow, text="AutoSTE", font=(fontstyle, 24))
@@ -80,7 +79,7 @@ def LoginRegister(loginWindow, fontstyle):
     errEmpty = Label(loginWindow, text="Entries must be populated", font=(fontstyle, 10), foreground='red')
     errSpace = Label(loginWindow, text="User ID and Password can not contain whitespaces", font=(fontstyle, 10), foreground='red')
 
-    #Configure widget geometry
+    # Configure widget geometry
     lblAutoSTE.pack(pady=70)
     lblLogin.pack(pady=(90, 5))
     entUser.pack(pady=5)
@@ -90,18 +89,17 @@ def LoginRegister(loginWindow, fontstyle):
     btnLogin.pack(side='left')
     btnRegister.pack(side='left')
     
-    #Execute
+    # Execute
     loginWindow.mainloop()
+
 
 if __name__ == "__main__":
 
-    #Set the font
+    # Set the font
     fontstyle = 'Courier New'
 
-    #Create a root window and set dimensions
+    # Create a root window and set dimensions
     root = Tk()
     root.geometry('1024x768')
 
     LoginRegister(root, fontstyle)
-
-

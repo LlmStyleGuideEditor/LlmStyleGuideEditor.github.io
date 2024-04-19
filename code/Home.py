@@ -3,24 +3,25 @@ from datetime import datetime
 import UploadDownload
 import History
 
+
 def home(homeWindow, fontstyle):
 
-    #Set title
+    # Set title
     homeWindow.title("Home")
 
-    #Utility functions
+    # Utility functions
     def retrievePreText():
-        txt = txtPre.get("1.0","end-1c")
+        txt = txtPre.get("1.0", "end-1c")
         return txt
     
     def retrievePostText():
         txt = txtPost.get("1.0", "end-1c")
         return txt
 
-    #Button command functions
+    # Button command functions
     def cmdHistory():
     
-        #Forget all widgets
+        # Forget all widgets
         frame0.pack_forget()
         lblAutoSTE.pack_forget()
         frame1.pack_forget()
@@ -33,7 +34,7 @@ def home(homeWindow, fontstyle):
         time = datetime.now()
         strPre = retrievePreText()
 
-        #Kick strPre to LLM here
+        # Kick strPre to LLM here
 
         txtPost.configure(state=NORMAL)
         txtPost.delete("1.0", "end")
@@ -54,8 +55,7 @@ def home(homeWindow, fontstyle):
 
         UploadDownload.promptUser("Download", retrievePostText())
 
-
-    #Add widgets
+    # Add widgets
     frame0 = Frame(homeWindow)
     frame1 = Frame(homeWindow)
     frame2 = Frame(homeWindow)
@@ -73,11 +73,11 @@ def home(homeWindow, fontstyle):
     btnUpload = Button(frame2, width=17, height=2, text="Upload", font=(fontstyle, 10), command = cmdUpload)
     btnDownload = Button(frame2, width=36, height=2, text="Download", font=(fontstyle, 10), command=cmdDownload)
 
-    #Set yscrollcommand to scroll bars
+    # Set yscrollcommand to scroll bars
     txtPre.configure(yscrollcommand=scrPre.set)
     txtPost.configure(yscrollcommand=scrPost.set)
 
-    #Configure widget geometry
+    # Configure widget geometry
     frame0.pack(anchor=E)
     btnHistory.pack(side='right', padx= 1, pady = 1)
 
@@ -94,15 +94,16 @@ def home(homeWindow, fontstyle):
     btnUpload.pack(side='left', padx=(0,65), pady=1)
     btnDownload.pack(side='left', padx=50, pady=1)
 
-    #Execute
+    # Execute
     homeWindow.mainloop()
+
 
 if __name__ == "__main__":
 
-    #Set the font
+    # Set the font
     fontstyle = 'Courier New'
 
-    #Create a root window and set dimensions
+    # Create a root window and set dimensions
     root = Tk()
     root.geometry('1024x768')
 

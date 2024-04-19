@@ -6,7 +6,7 @@ def promptUser(type, *args):
 
     files = [("Text Document", "*.txt*")]
     
-    #Depending on upload vs download, call different functions
+    # Depending on upload vs download, call different functions
     if type == "Upload":
 
         filename = filedialog.askopenfilename(initialdir=Path.home() / "Downloads", title="Select a File", filetypes=files)
@@ -20,14 +20,14 @@ def promptUser(type, *args):
 
 def downloadFile(fullpath, contents):
 
-    #Write converted text to file
+    # Write converted text to file
     downloadFile = open(fullpath, 'w')
     downloadFile.write(contents)
     downloadFile.close()
 
 def uploadFile(fullpath):
 
-    #Read text file
+    # Read text file
     uploadFile = open(fullpath, 'r')
     contents = uploadFile.read()
     uploadFile.close
