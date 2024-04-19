@@ -2,6 +2,7 @@ from tkinter import *
 import upload_download
 import history
 import database
+import translator
 
 
 def home(home_window, fontstyle, current_user):
@@ -33,14 +34,14 @@ def home(home_window, fontstyle, current_user):
 
         str_pre = retrieve_pre_text()
 
-        # TODO Kick str_pre to LLM here
+        str_post = translator.translate(str_pre)
+        # Failsafe: just copy
+        # str_post = str_pre
 
         txt_post.configure(state=NORMAL)
         txt_post.delete("1.0", "end")
-        txt_post.insert("1.0", str_pre)
+        txt_post.insert("1.0", str_post)
         txt_post.configure(state=DISABLED)
-
-        str_post = retrieve_post_text()
 
         database.add_translation(current_user, str_pre, str_post)
 
