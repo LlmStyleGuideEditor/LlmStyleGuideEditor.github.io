@@ -5,98 +5,97 @@ import History
 import database
 
 
-def home(homeWindow, fontstyle, currentUser):
+def home(home_window, fontstyle, current_user):
 
     # Set title
-    homeWindow.title("Home")
+    home_window.title("Home")
 
     # Utility functions
-    def retrievePreText():
-        txt = txtPre.get("1.0", "end-1c")
+    def retrieve_pre_text():
+        txt = txt_pre.get("1.0", "end-1c")
         return txt
     
-    def retrievePostText():
-        txt = txtPost.get("1.0", "end-1c")
+    def retrieve_post_text():
+        txt = txt_post.get("1.0", "end-1c")
         return txt
 
     # Button command functions
-    def cmdHistory():
+    def cmd_history():
     
         # Forget all widgets
         frame0.pack_forget()
-        lblAutoSTE.pack_forget()
+        lbl_auto_ste.pack_forget()
         frame1.pack_forget()
         frame2.pack_forget()
 
-        History.history(homeWindow, fontstyle, currentUser)
+        History.history(home_window, fontstyle, current_user)
     
-    def cmdConvert():
+    def cmd_convert():
 
-        time = datetime.now()
-        strPre = retrievePreText()
+        str_pre = retrieve_pre_text()
 
-        # Kick strPre to LLM here
+        # TODO Kick strPre to LLM here
 
-        txtPost.configure(state=NORMAL)
-        txtPost.delete("1.0", "end")
-        txtPost.insert("1.0", strPre)
-        txtPost.configure(state=DISABLED)
+        txt_post.configure(state=NORMAL)
+        txt_post.delete("1.0", "end")
+        txt_post.insert("1.0", str_pre)
+        txt_post.configure(state=DISABLED)
 
-        strPost = retrievePostText()
+        str_post = retrieve_post_text()
 
-        database.add_translation(currentUser, strPre, strPost)
+        database.add_translation(current_user, str_pre, str_post)
 
-    def cmdUpload():
+    def cmd_upload():
         
-        strUpload = UploadDownload.promptUser("Upload")
-        txtPre.delete("1.0", "end")
-        txtPre.insert("1.0", strUpload)
+        str_upload = UploadDownload.prompt_user("Upload")
+        txt_pre.delete("1.0", "end")
+        txt_pre.insert("1.0", str_upload)
     
-    def cmdDownload():
+    def cmd_download():
 
-        UploadDownload.promptUser("Download", retrievePostText())
+        UploadDownload.prompt_user("Download", retrieve_post_text())
 
     # Add widgets
-    frame0 = Frame(homeWindow)
-    frame1 = Frame(homeWindow)
-    frame2 = Frame(homeWindow)
+    frame0 = Frame(home_window)
+    frame1 = Frame(home_window)
+    frame2 = Frame(home_window)
 
-    btnHistory = Button(frame0, text="Conversion History", font=(fontstyle, 10), command=cmdHistory)
+    btn_history = Button(frame0, text="Conversion History", font=(fontstyle, 10), command=cmd_history)
 
-    lblAutoSTE = Label(homeWindow, text="AutoSTE", font=(fontstyle, 24))
+    lbl_auto_ste = Label(home_window, text="AutoSTE", font=(fontstyle, 24))
 
-    txtPre = Text(frame1, width=36, height=25, font=(fontstyle, 10))
-    txtPost = Text(frame1, width=36, height=25, font=(fontstyle, 10), state=DISABLED)
-    scrPre = Scrollbar(frame1, command=txtPre.yview)
-    scrPost = Scrollbar(frame1, command=txtPost.yview)
+    txt_pre = Text(frame1, width=36, height=25, font=(fontstyle, 10))
+    txt_post = Text(frame1, width=36, height=25, font=(fontstyle, 10), state=DISABLED)
+    scr_pre = Scrollbar(frame1, command=txt_pre.yview)
+    scr_post = Scrollbar(frame1, command=txt_post.yview)
 
-    btnConvert = Button(frame2, width=17, height=2, text="Convert", font=(fontstyle, 10), command=cmdConvert)
-    btnUpload = Button(frame2, width=17, height=2, text="Upload", font=(fontstyle, 10), command = cmdUpload)
-    btnDownload = Button(frame2, width=36, height=2, text="Download", font=(fontstyle, 10), command=cmdDownload)
+    btn_convert = Button(frame2, width=17, height=2, text="Convert", font=(fontstyle, 10), command=cmd_convert)
+    btn_upload = Button(frame2, width=17, height=2, text="Upload", font=(fontstyle, 10), command=cmd_upload)
+    btn_download = Button(frame2, width=36, height=2, text="Download", font=(fontstyle, 10), command=cmd_download)
 
     # Set yscrollcommand to scroll bars
-    txtPre.configure(yscrollcommand=scrPre.set)
-    txtPost.configure(yscrollcommand=scrPost.set)
+    txt_pre.configure(yscrollcommand=scr_pre.set)
+    txt_post.configure(yscrollcommand=scr_post.set)
 
     # Configure widget geometry
     frame0.pack(anchor=E)
-    btnHistory.pack(side='right', padx= 1, pady = 1)
+    btn_history.pack(side='right', padx=1, pady=1)
 
-    lblAutoSTE.pack(pady=40)
+    lbl_auto_ste.pack(pady=40)
 
-    frame1.pack(pady=(0,1))
-    txtPre.pack(side='left')
-    scrPre.pack(side='left', fill='y', padx=(0,50))
-    txtPost.pack(side='left', padx=(50,0))
-    scrPost.pack(side='left', fill='y')
+    frame1.pack(pady=(0, 1))
+    txt_pre.pack(side='left')
+    scr_pre.pack(side='left', fill='y', padx=(0, 50))
+    txt_post.pack(side='left', padx=(50, 0))
+    scr_post.pack(side='left', fill='y')
 
     frame2.pack()
-    btnConvert.pack(side='left', padx=(35,0), pady=1)
-    btnUpload.pack(side='left', padx=(0,65), pady=1)
-    btnDownload.pack(side='left', padx=50, pady=1)
+    btn_convert.pack(side='left', padx=(35, 0), pady=1)
+    btn_upload.pack(side='left', padx=(0, 65), pady=1)
+    btn_download.pack(side='left', padx=50, pady=1)
 
     # Execute
-    homeWindow.mainloop()
+    home_window.mainloop()
 
 
 if __name__ == "__main__":

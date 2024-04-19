@@ -1,39 +1,38 @@
-from tkinter import *
 from tkinter import filedialog
 from pathlib import Path
 
 
-def promptUser(type, download_text=None):
+def prompt_user(operation, download_text=None):
 
     files = [("Text Document", "*.txt*")]
     
     # Depending on upload vs download, call different functions
-    if type == "Upload":
+    if operation == "Upload":
 
         filename = filedialog.askopenfilename(initialdir=Path.home() / "Downloads",
                                               title="Select a File", filetypes=files)
-        return uploadFile(filename)
+        return upload_file(filename)
 
-    elif type == "Download":
+    elif operation == "Download":
         
         filename = filedialog.asksaveasfilename(initialdir=Path.home() / "Downloads", initialfile="ste.txt",
-                                                title="Create a file", filetypes=files, defaultextension=files)
-        downloadFile(filename, download_text)
+                                                title="Create a file", filetypes=files)
+        download_file(filename, download_text)
 
 
-def downloadFile(fullpath, contents):
+def download_file(fullpath, contents):
 
     # Write converted text to file
-    downloadFile = open(fullpath, 'w')
-    downloadFile.write(contents)
-    downloadFile.close()
+    file = open(fullpath, 'w')
+    file.write(contents)
+    file.close()
 
 
-def uploadFile(fullpath):
+def upload_file(fullpath):
 
     # Read text file
-    uploadFile = open(fullpath, 'r')
-    contents = uploadFile.read()
-    uploadFile.close()
+    file = open(fullpath, 'r')
+    contents = file.read()
+    file.close()
 
     return contents

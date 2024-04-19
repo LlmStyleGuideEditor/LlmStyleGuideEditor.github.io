@@ -7,57 +7,57 @@ import datetime
 translations = []
 
 
-def history(historyWindow, fontstyle, currentUser):
+def history(history_window, fontstyle, current_user):
 
     # Access global variables
     global translations
 
     # Set title
-    historyWindow.title("History")
+    history_window.title("History")
 
     # Button command functions
-    def cmdBack():
+    def cmd_back():
 
         # Forget all widgets
-        btnBack.pack_forget()
-        lblAutoSTE.pack_forget()
-        for frame in frameArr:
+        btn_back.pack_forget()
+        lbl_auto_ste.pack_forget()
+        for frame in frame_arr:
             frame.pack_forget()
         
-        Home.home(historyWindow, fontstyle, currentUser)
+        Home.home(history_window, fontstyle, current_user)
 
-    def cmdDownload(index):
+    def cmd_download(index):
 
-        UploadDownload.promptUser("Download", translations[index].out_text)
+        UploadDownload.prompt_user("Download", translations[index].out_text)
 
     # Add widgets
-    btnBack = Button(historyWindow, text="Back", font=(fontstyle, 10), command=cmdBack)
+    btn_back = Button(history_window, text="Back", font=(fontstyle, 10), command=cmd_back)
     
-    lblAutoSTE = Label(historyWindow, text="AutoSTE", font=(fontstyle, 24))
+    lbl_auto_ste = Label(history_window, text="AutoSTE", font=(fontstyle, 24))
 
-    frameArr = []
-    timeLabelsArr = []
-    downloadButtonsArr = []
+    frame_arr = []
+    time_labels_arr = []
+    download_buttons_arr = []
 
-    translations = database.get_translations(currentUser)
+    translations = database.get_translations(current_user)
     for index, translation in enumerate(translations):
-        frameArr.append(Frame(historyWindow))
-        timeLabelsArr.append(Label(frameArr[index], text=str(datetime.datetime.fromtimestamp(translation.timestamp)),
-                                   font=(fontstyle, 10)))
-        downloadButtonsArr.append(Button(frameArr[index], text="Download", font=(fontstyle, 10),
-                                         command=lambda idx=index: cmdDownload(idx)))
+        frame_arr.append(Frame(history_window))
+        time_labels_arr.append(Label(frame_arr[index], text=str(datetime.datetime.fromtimestamp(translation.timestamp)),
+                                     font=(fontstyle, 10)))
+        download_buttons_arr.append(Button(frame_arr[index], text="Download", font=(fontstyle, 10),
+                                           command=lambda idx=index: cmd_download(idx)))
     
     # Configure widget geometry
-    btnBack.pack(anchor=W, padx=1, pady=1)
-    lblAutoSTE.pack(pady=40)
+    btn_back.pack(anchor=W, padx=1, pady=1)
+    lbl_auto_ste.pack(pady=40)
 
-    for i in range(len(timeLabelsArr)):
-        frameArr[i].pack(pady=10)
-        timeLabelsArr[i].pack(side = 'left', padx=20)
-        downloadButtonsArr[i].pack(side = 'left', padx=20)
+    for i in range(len(time_labels_arr)):
+        frame_arr[i].pack(pady=10)
+        time_labels_arr[i].pack(side='left', padx=20)
+        download_buttons_arr[i].pack(side='left', padx=20)
 
     # Execute
-    historyWindow.mainloop()
+    history_window.mainloop()
 
  
 if __name__ == "__main__":
