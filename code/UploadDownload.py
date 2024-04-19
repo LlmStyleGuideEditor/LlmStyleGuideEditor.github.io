@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 from pathlib import Path
 
+
 def promptUser(type, *args):
 
     files = [("Text Document", "*.txt*")]
@@ -10,13 +11,13 @@ def promptUser(type, *args):
     if type == "Upload":
 
         filename = filedialog.askopenfilename(initialdir=Path.home() / "Downloads", title="Select a File", filetypes=files)
-        return(uploadFile(filename))
-        
-        
+        return uploadFile(filename)
+
     elif type == "Download":
         
         filename = filedialog.asksaveasfilename(initialdir=Path.home() / "Downloads",initialfile="ste.txt", title="Create a file", filetypes=files, defaultextension=files)
         downloadFile(filename, args[0])      
+
 
 def downloadFile(fullpath, contents):
 
@@ -25,11 +26,12 @@ def downloadFile(fullpath, contents):
     downloadFile.write(contents)
     downloadFile.close()
 
+
 def uploadFile(fullpath):
 
     # Read text file
     uploadFile = open(fullpath, 'r')
     contents = uploadFile.read()
-    uploadFile.close
+    uploadFile.close()
 
     return contents
