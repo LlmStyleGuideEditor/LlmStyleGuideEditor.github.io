@@ -7,7 +7,7 @@ from User import User
 
 
 # Database connection
-connection = sqlite3.connect('users')
+connection = sqlite3.connect('AutoSTEDB')
 cursor = connection.cursor()
 
 
