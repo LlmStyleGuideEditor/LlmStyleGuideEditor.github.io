@@ -94,7 +94,7 @@ def get_user_key(user):
     cursor.execute("select * from users where username = ?", (user.username,))
     user_data = cursor.fetchone()
 
-    encrypted_data_key = user_data[4]
+    encrypted_data_key = b64decode(user_data[4])
     nonce = user_data[5]
 
     cipher = AES.new(user.key_encryption_key, AES.MODE_CCM, nonce=nonce)
@@ -107,9 +107,18 @@ def add_translation(user, in_text, out_text, commit=True):
 
     now = time.time()
 
-    # TODO: encrypt
-    cursor.execute("insert into translation_log (user_id, timestamp, input, output) values (?, ?, ?, ?)",
-                   (user.user_id, now, in_text, out_text))
+    data_key = get_user_key(user)
+
+    cipher = AES.new(data_key, AES.MODE_CCM)
+    in_encrypted = cipher.encrypt(in_text.encode('utf-8'))
+    in_nonce = cipher.nonce
+    cipher = AES.new(data_key, AES.MODE_CCM)
+    out_encrypted = cipher.encrypt(out_text.encode('utf-8'))
+    out_nonce = cipher.nonce
+
+    cursor.execute("insert into translation_log (user_id, timestamp, input, output, in_nonce, out_nonce)"
+                   "values (?, ?, ?, ?, ?, ?)",
+                   (user.user_id, now, in_encrypted, out_encrypted, in_nonce, out_nonce))
     if commit:
         connection.commit()
 
@@ -118,13 +127,32 @@ def add_translation(user, in_text, out_text, commit=True):
 
 def get_translations(user):
 
-    # TODO: decrypt
     cursor.execute("select * from translation_log where user_id = ?", (user.user_id,))
+    data_rows = cursor.fetchall()
+    translations = []
 
-    return [Translation(data_row[1], data_row[2], data_row[3], data_row[4]) for data_row in cursor.fetchall()]
+    for data_row in data_rows:
+        user_id = data_row[1]
+        timestamp = data_row[2]
+        in_text_encrypted = data_row[3]
+        out_text_encrypted = data_row[4]
+        in_text_nonce = data_row[5]
+        out_text_nonce = data_row[6]
+
+        data_key = get_user_key(user)
+
+        cipher = AES.new(data_key, AES.MODE_CCM, nonce=in_text_nonce)
+        in_text = cipher.decrypt(in_text_encrypted).decode('utf-8')
+        cipher = AES.new(data_key, AES.MODE_CCM, nonce=out_text_nonce)
+        out_text = cipher.decrypt(out_text_encrypted).decode('utf-8')
+
+        translations.append(Translation(user_id, timestamp, in_text, out_text))
+
+    return translations
 
 
 if __name__ == '__main__':
     print(repr(user := login_user("uid", "upass")))
-    print(repr(add_translation(user, "Hello World 2", "Hello World 2")))
-    print(repr(get_translations(user)))
+    print(repr(add_translation(user, "Hello World 5", "Hello World 5", commit=False)))
+    for translation in get_translations(user):
+        print(repr(translation))
