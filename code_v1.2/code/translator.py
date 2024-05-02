@@ -1,0 +1,28 @@
+import requests
+
+STE_LLAMA2_EIC = "https://rd1kgw40ukamey40.us-east-1.aws.endpoints.huggingface.cloud"
+LLAMA2_7B_MINI_STE_BJI = "https://po31as4mtpskbg57.us-east-1.aws.endpoints.huggingface.cloud"
+API_URL = STE_LLAMA2_EIC
+API_TOKEN = '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'  # TODO: this is a security risk
+headers = {
+	"Accept" : "application/json",
+	"Authorization": f"Bearer {API_TOKEN}",
+	"Content-Type": "application/json" 
+}
+
+
+def query(payload):
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
+
+
+def translate(in_text):
+    output = query({
+	    "inputs": f'Convert the following sentence to STE style guide. {in_text}',
+	    "parameters": {}
+    })
+    return output[0]['generated_text']
+
+
+if __name__ == '__main__':
+    print(translate("Strip away the blaster burns from the wall."))
