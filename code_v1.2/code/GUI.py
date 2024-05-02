@@ -122,9 +122,9 @@ class GUI:
 
             str_pre = retrieve_pre_text()
 
-            #str_post = translator.translate(str_pre)
+            str_post = translator.translate(str_pre)
             # Failsafe: just copy
-            str_post = str_pre
+            #str_post = str_pre
 
             txt_post.configure(state=NORMAL)
             txt_post.delete("1.0", "end")
